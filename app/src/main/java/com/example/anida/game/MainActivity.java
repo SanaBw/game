@@ -15,13 +15,11 @@ import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button buttonLetters, buttonNumbers, buttonDays, buttonMonths, buttonAnimals, buttonColors, buttonQuizes, buttonSound;
+    private Button buttonSound;
     private boolean soundPlaying;
-    private ImageView imageGame;
     private MediaPlayer mediaPlayer;
     private int length;
     private Intent intent;
-    private Animation rotateBall;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -31,17 +29,17 @@ public class MainActivity extends AppCompatActivity {
 
         length=0;
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.song);
-        rotateBall = AnimationUtils.loadAnimation(MainActivity.this, R.anim.rotate);
+        Animation rotateBall = AnimationUtils.loadAnimation(MainActivity.this, R.anim.rotate);
 
-        buttonLetters = findViewById(R.id.button_letters);
-        buttonNumbers = findViewById(R.id.button_numbers);
-        buttonDays = findViewById(R.id.button_days);
-        buttonMonths = findViewById(R.id.button_months);
-        buttonAnimals = findViewById(R.id.button_animals);
-        buttonColors = findViewById(R.id.button_colors);
-        buttonQuizes = findViewById(R.id.button_quizes);
+        Button buttonLetters = findViewById(R.id.button_letters);
+        Button buttonNumbers = findViewById(R.id.button_numbers);
+        Button buttonDays = findViewById(R.id.button_days);
+        Button buttonMonths = findViewById(R.id.button_months);
+        Button buttonAnimals = findViewById(R.id.button_animals);
+        Button buttonColors = findViewById(R.id.button_colors);
+        Button buttonQuizes = findViewById(R.id.button_quizes);
         buttonSound = findViewById(R.id.button_sound);
-        imageGame = findViewById(R.id.image_game);
+        ImageView imageGame = findViewById(R.id.image_game);
 
         mediaPlayer.start();
         soundPlaying=true;
@@ -64,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 darkenButton(v, event);
+                intent = new Intent(MainActivity.this, NumbersActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
                 return true;
             }
         });

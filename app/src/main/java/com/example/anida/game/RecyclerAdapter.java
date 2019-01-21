@@ -113,7 +113,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                                 editor.apply();
                             }
 
-                            if (sharedPreferences.getAll().size() == 2) {
+                            if (sharedPreferences.getAll().size() == 26) {
                                 editor.clear();
                                 editor.apply();
                                 LettersActivity.bravo();
