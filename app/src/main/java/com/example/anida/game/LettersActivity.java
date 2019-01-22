@@ -18,15 +18,15 @@ public class LettersActivity extends AppCompatActivity {
     private Button buttonAlphabet;
     private static MediaPlayer mediaPlayer;
     static ImageView imageBravo;
-    static Animation zoomIn;
+    static Animation rotate;
     private static Context context;
     static String[] lettersDataset;
     static int[] lettersSounds, lettersImages;
 
     public static void bravo() {
         imageBravo.setAlpha(1f); //because if it's second time to play the animation, alpha is 0f (onAnimationEnd)
-        imageBravo.startAnimation(zoomIn);
-        zoomIn.setAnimationListener(new Animation.AnimationListener() {
+        imageBravo.startAnimation(rotate);
+        rotate.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
                 imageBravo.setVisibility(View.VISIBLE);
@@ -37,8 +37,14 @@ public class LettersActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 imageBravo.setAlpha(0f); //hide after animation ends
-                mediaPlayer.stop();
-                mediaPlayer.release();
+                if (mediaPlayer != null) {
+                    try {
+                        mediaPlayer.stop();
+                        mediaPlayer.release();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 
                 //start the quiz
                 Intent intent = new Intent(context, LettersQuiz.class);
@@ -74,12 +80,12 @@ public class LettersActivity extends AppCompatActivity {
         buttonAlphabet = findViewById(R.id.button_alphabet);
         context=getApplicationContext();
         imageBravo = findViewById(R.id.image_bravo);
-        zoomIn = AnimationUtils.loadAnimation(context, R.anim.rotate_2);
+        rotate = AnimationUtils.loadAnimation(context, R.anim.rotate_2);
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager recyclerManager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(recyclerManager);
-        RecyclerView.Adapter recyclerAdapter = new RecyclerAdapter(lettersDataset, lettersImages, R.layout.letter, lettersSounds, getApplicationContext());
+        RecyclerView.Adapter recyclerAdapter = new RecyclerAdapterLetters(lettersDataset, lettersImages, R.layout.letter, lettersSounds, getApplicationContext());
         recyclerView.setAdapter(recyclerAdapter);
 
         buttonAlphabet.setOnClickListener(new View.OnClickListener() {

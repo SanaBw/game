@@ -1,52 +1,54 @@
 package com.example.anida.game;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioAttributes;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.util.Random;
-
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class RecyclerAdapterNumbers extends RecyclerView.Adapter<RecyclerAdapterNumbers.ViewHolder> {
 
     private String[] items;
     private int[] itemsImages;
     private int itemLayout;
     private int[] itemsSounds;
     private Context context;
+    private String[] itemsString;
 
-
-    public RecyclerAdapter(String[] items, int[] itemsImages, int itemLayout, int[] itemsSounds, Context context) {
+    public RecyclerAdapterNumbers(String[] items, String[] itemsString, int[] itemsSounds, int[] itemsImages, int itemLayout, Context context) {
         this.items = items;
+        this.itemsString = itemsString;
+        this.itemsSounds = itemsSounds;
         this.itemsImages = itemsImages;
         this.itemLayout = itemLayout;
-        this.itemsSounds = itemsSounds;
         this.context = context;
-    }
 
+    }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
-        return new ViewHolder(v);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(itemLayout, viewGroup, false);
+        return new RecyclerAdapterNumbers.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        int itemImage = itemsImages[position];
-        holder.image.setImageResource(itemImage);
+    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
+        String number = items[i];
+        String numberString = itemsString[i];
+        int numberImage = itemsImages[i];
+
+        viewHolder.textNumberString.setText(numberString);
+        viewHolder.textNumber.setText(number);
+
+        viewHolder.imageNumber.setImageResource(numberImage);
     }
 
     @Override
@@ -55,36 +57,28 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        int itemSound;
-        ImageView image;
-        int[] animationResources = {R.anim.bounce_down, R.anim.bounce_up, R.anim.bounce_left, R.anim.bounce_right};
-        SharedPreferences sharedPreferences = context.getSharedPreferences("LettersDone", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Boolean letterPlayed;
-        Animation animation;
+        TextView textNumber, textNumberString;
+        ImageView imageNumber;
+        Button buttonSound;
         SoundPool soundPool;
-        int soundID;
+        int soundID, itemSound;
         AudioAttributes attributes = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build();
-
-        private ViewHolder(final View itemView) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("NumbersDone", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Boolean numberPlayed;
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.image);
+            textNumber = itemView.findViewById(R.id.text_number);
+            textNumberString = itemView.findViewById(R.id.text_number_string);
+            imageNumber = itemView.findViewById(R.id.image_number);
+            buttonSound = itemView.findViewById(R.id.button_sound);
 
-
-            image.setOnClickListener(new View.OnClickListener() {
+            buttonSound.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    //randomize animation
-                    Random random = new Random();
-                    random.nextInt();
-                    int randomAnimationResource = animationResources[random.nextInt(animationResources.length)];
-                    animation = AnimationUtils.loadAnimation(context, randomAnimationResource);
-                    image.startAnimation(animation);
-
                     //play sound of letter pressed
                     itemSound = itemsSounds[getAdapterPosition()];
-                    soundPool = new SoundPool.Builder().setMaxStreams(10)
+                    soundPool = new SoundPool.Builder().setMaxStreams(2)
                             .setAudioAttributes(attributes)
                             .build();
 
@@ -94,6 +88,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         public void onLoadComplete(final SoundPool soundPool, int sampleId, int status) {
                             soundPool.play(soundID, 1, 1, 1, 0, 1f);
 
+                            //release object after playing the sound
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -106,29 +101,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                                 }
                             }).start();
 
-                            //add as played in shared preferences if it is not already added
-                            letterPlayed = sharedPreferences.getBoolean(items[getAdapterPosition()], false);
-                            if (!letterPlayed) {
+                            //add number as played in shared preferences if it is not already added
+                            numberPlayed = sharedPreferences.getBoolean(items[getAdapterPosition()], false);
+                            if (!numberPlayed) {
                                 editor.putBoolean(items[getAdapterPosition()], true);
                                 editor.apply();
                             }
 
-                            if (sharedPreferences.getAll().size() == 26) {
+                            if (sharedPreferences.getAll().size() > 0) {
                                 editor.clear();
                                 editor.apply();
-                                LettersActivity.bravo();
+                                NumbersActivity.bravo();
                             }
                         }
                     });
+
+
                 }
             });
-
-
         }
-
     }
-
-
 }
-
-
