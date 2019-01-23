@@ -66,6 +66,7 @@ public class RecyclerAdapterNumbers extends RecyclerView.Adapter<RecyclerAdapter
         SharedPreferences sharedPreferences = context.getSharedPreferences("NumbersDone", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Boolean numberPlayed;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textNumber = itemView.findViewById(R.id.text_number);
@@ -108,15 +109,15 @@ public class RecyclerAdapterNumbers extends RecyclerView.Adapter<RecyclerAdapter
                                 editor.apply();
                             }
 
-                            if (sharedPreferences.getAll().size() > 0) {
+                            //if all numbers are played and learned - congrats and quiz
+                            if (sharedPreferences.getAll().size() == 21) {
                                 editor.clear();
                                 editor.apply();
                                 NumbersActivity.bravo();
                             }
+
                         }
                     });
-
-
                 }
             });
         }

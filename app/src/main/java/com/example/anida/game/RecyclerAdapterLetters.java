@@ -119,13 +119,8 @@ public class RecyclerAdapterLetters extends RecyclerView.Adapter<RecyclerAdapter
                     });
                 }
             });
-
-
         }
-
     }
-
-
 }
 
 

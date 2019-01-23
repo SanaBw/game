@@ -15,13 +15,13 @@ import android.widget.ImageView;
 
 public class LettersActivity extends AppCompatActivity {
 
-    private Button buttonAlphabet;
-    private static MediaPlayer mediaPlayer;
     static ImageView imageBravo;
     static Animation rotate;
-    private static Context context;
     static String[] lettersDataset;
     static int[] lettersSounds, lettersImages;
+    private static MediaPlayer mediaPlayer;
+    private static Context context;
+    private Button buttonAlphabet;
 
     public static void bravo() {
         imageBravo.setAlpha(1f); //because if it's second time to play the animation, alpha is 0f (onAnimationEnd)
@@ -54,12 +54,8 @@ public class LettersActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
+            public void onAnimationRepeat(Animation animation) {}
         });
-
-
     }
 
     @Override
@@ -67,18 +63,18 @@ public class LettersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_letters);
 
-        lettersDataset = new String[] {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
-        lettersImages = new int[] {R.mipmap.lettera, R.mipmap.letterb, R.mipmap.letterc, R.mipmap.letterd, R.mipmap.lettere, R.mipmap.letterf, R.mipmap.letterg,
+        lettersDataset = new String[]{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+        lettersImages = new int[]{R.mipmap.lettera, R.mipmap.letterb, R.mipmap.letterc, R.mipmap.letterd, R.mipmap.lettere, R.mipmap.letterf, R.mipmap.letterg,
                 R.mipmap.letterh, R.mipmap.letteri, R.mipmap.letterj, R.mipmap.letterk, R.mipmap.letterl, R.mipmap.letterm, R.mipmap.lettern, R.mipmap.lettero,
                 R.mipmap.letterp, R.mipmap.letterq, R.mipmap.letterr, R.mipmap.letterss, R.mipmap.lettert, R.mipmap.letteru, R.mipmap.letterv, R.mipmap.letterw,
                 R.mipmap.letterx, R.mipmap.lettery, R.mipmap.letterz};
-        lettersSounds = new int[] {R.raw.sounda, R.raw.soundb, R.raw.soundc, R.raw.soundd, R.raw.sounde, R.raw.soundf, R.raw.soundg, R.raw.soundh, R.raw.soundi,
+        lettersSounds = new int[]{R.raw.sounda, R.raw.soundb, R.raw.soundc, R.raw.soundd, R.raw.sounde, R.raw.soundf, R.raw.soundg, R.raw.soundh, R.raw.soundi,
                 R.raw.soundj, R.raw.soundk, R.raw.soundl, R.raw.soundm, R.raw.soundn, R.raw.soundo, R.raw.soundp, R.raw.soundq, R.raw.soundr, R.raw.sounds,
                 R.raw.soundt, R.raw.soundu, R.raw.soundv, R.raw.soundw, R.raw.soundx, R.raw.soundy, R.raw.soundz};
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         buttonAlphabet = findViewById(R.id.button_alphabet);
-        context=getApplicationContext();
+        context = getApplicationContext();
         imageBravo = findViewById(R.id.image_bravo);
         rotate = AnimationUtils.loadAnimation(context, R.anim.rotate_2);
 
@@ -105,8 +101,6 @@ public class LettersActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     @Override

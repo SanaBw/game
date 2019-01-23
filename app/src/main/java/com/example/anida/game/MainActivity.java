@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        length=0;
+        length = 0;
         mediaPlayer = MediaPlayer.create(getApplicationContext(), R.raw.song);
         Animation rotateBall = AnimationUtils.loadAnimation(MainActivity.this, R.anim.rotate);
 
@@ -38,90 +38,94 @@ public class MainActivity extends AppCompatActivity {
         Button buttonAnimals = findViewById(R.id.button_animals);
         Button buttonColors = findViewById(R.id.button_colors);
         Button buttonQuizes = findViewById(R.id.button_quizes);
+        Button[] buttons = new Button[]{buttonLetters, buttonNumbers, buttonDays, buttonMonths, buttonAnimals, buttonColors, buttonQuizes};
         buttonSound = findViewById(R.id.button_sound);
         ImageView imageGame = findViewById(R.id.image_game);
 
         mediaPlayer.start();
-        soundPlaying=true;
+        soundPlaying = true;
         imageGame.startAnimation(rotateBall);
 
+        for (Button b : buttons) { //onTouch because of animations --returns false aka. not pressed, no new activity
+            b.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    darkenButton(v, event);
+                    return false;
+                }
+            });
+        }
 
-        //onTouch instead of onClick because of animations
-        buttonLetters.setOnTouchListener(new View.OnTouchListener() {
+        buttonLetters.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                darkenButton(v, event);
+            public void onClick(View v) {
                 intent = new Intent(MainActivity.this, LettersActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_SINGLE_TOP); //need flags because onTouchListener sometimes doubles the activity start
                 startActivity(intent);
-                return true;
             }
         });
 
-        buttonNumbers.setOnTouchListener(new View.OnTouchListener() {
+        buttonNumbers.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                darkenButton(v, event);
+            public void onClick(View v) {
                 intent = new Intent(MainActivity.this, NumbersActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
-                return true;
             }
         });
 
-        buttonDays.setOnTouchListener(new View.OnTouchListener() {
+        buttonDays.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                darkenButton(v, event);
-                return true;
+            public void onClick(View v) {
+                // intent = new Intent(MainActivity.this, LettersActivity.class);
+                // startActivity(intent);
             }
         });
 
-        buttonMonths.setOnTouchListener(new View.OnTouchListener() {
+        buttonMonths.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                darkenButton(v, event);
-                return true;
+            public void onClick(View v) {
+                // intent = new Intent(MainActivity.this, LettersActivity.class);
+                // startActivity(intent);
+
             }
         });
-        buttonAnimals.setOnTouchListener(new View.OnTouchListener() {
+
+        buttonAnimals.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                darkenButton(v, event);
-                return true;
+            public void onClick(View v) {
+                //intent = new Intent(MainActivity.this, LettersActivity.class);
+                // startActivity(intent);
             }
         });
-        buttonColors.setOnTouchListener(new View.OnTouchListener() {
+        buttonColors.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                darkenButton(v, event);
-                return true;
+            public void onClick(View v) {
+                // intent = new Intent(MainActivity.this, LettersActivity.class);
+                // startActivity(intent);
             }
         });
-        buttonQuizes.setOnTouchListener(new View.OnTouchListener() {
+
+        buttonQuizes.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                darkenButton(v, event);
-                return true;
+            public void onClick(View v) {
+                //intent = new Intent(MainActivity.this, LettersActivity.class);
+                // startActivity(intent);
             }
         });
 
         buttonSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (soundPlaying){
+                if (soundPlaying) {
                     pauseMusic();
-                    soundPlaying=false;
+                    soundPlaying = false;
                     buttonSound.setBackgroundResource(R.mipmap.nosound);
                 } else {
                     resumeMusic();
                     buttonSound.setBackgroundResource(R.mipmap.sound);
-                    soundPlaying=true;
+                    soundPlaying = true;
                 }
             }
         });
-
-
     }
 
     @Override
@@ -133,22 +137,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (soundPlaying){
+        if (soundPlaying) {
             resumeMusic(); //when we resume activity(start it again) songs starts playing if the sound isn't muted
         }
     }
 
-    public void pauseMusic(){
+    public void pauseMusic() {
         mediaPlayer.pause();
-        length=mediaPlayer.getCurrentPosition();
+        length = mediaPlayer.getCurrentPosition();
     }
 
-    public void resumeMusic(){
+    public void resumeMusic() {
         mediaPlayer.seekTo(length);
         mediaPlayer.start();
     }
 
-    public void darkenButton(View v, MotionEvent event){
+    public void darkenButton(View v, MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 Button view = (Button) v;
@@ -156,8 +160,6 @@ public class MainActivity extends AppCompatActivity {
                 v.invalidate();
                 break;
             }
-            case MotionEvent.ACTION_UP:
-                // Your action here on button click
             case MotionEvent.ACTION_CANCEL: {
                 Button view = (Button) v;
                 view.getBackground().clearColorFilter();
@@ -166,6 +168,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
-
 }

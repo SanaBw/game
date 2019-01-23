@@ -38,38 +38,38 @@ public class LettersQuiz extends AppCompatActivity {
         buttonSound = findViewById(R.id.button_question);
         buttonExit = findViewById(R.id.button_exit);
         buttons = new Button[]{
-        buttonA = findViewById(R.id.button_a),
-        buttonB = findViewById(R.id.button_b),
-        buttonC = findViewById(R.id.button_c),
-        buttonD = findViewById(R.id.button_d),
-        buttonE = findViewById(R.id.button_e),
-        buttonF = findViewById(R.id.button_f),
-        buttonG = findViewById(R.id.button_g),
-        buttonH = findViewById(R.id.button_h),
-        buttonI = findViewById(R.id.button_i),
-        buttonJ = findViewById(R.id.button_j),
-        buttonK = findViewById(R.id.button_k),
-        buttonL = findViewById(R.id.button_l),
-        buttonM = findViewById(R.id.button_m),
-        buttonN = findViewById(R.id.button_n),
-        buttonO = findViewById(R.id.button_o),
-        buttonP = findViewById(R.id.button_p),
-        buttonQ = findViewById(R.id.button_q),
-        buttonR = findViewById(R.id.button_r),
-        buttonS = findViewById(R.id.button_s),
-        buttonT = findViewById(R.id.button_t),
-        buttonU = findViewById(R.id.button_u),
-        buttonV = findViewById(R.id.button_v),
-        buttonW = findViewById(R.id.button_w),
-        buttonX = findViewById(R.id.button_x),
-        buttonY = findViewById(R.id.button_y),
-        buttonZ = findViewById(R.id.button_z)};
+                buttonA = findViewById(R.id.button_a),
+                buttonB = findViewById(R.id.button_b),
+                buttonC = findViewById(R.id.button_c),
+                buttonD = findViewById(R.id.button_d),
+                buttonE = findViewById(R.id.button_e),
+                buttonF = findViewById(R.id.button_f),
+                buttonG = findViewById(R.id.button_g),
+                buttonH = findViewById(R.id.button_h),
+                buttonI = findViewById(R.id.button_i),
+                buttonJ = findViewById(R.id.button_j),
+                buttonK = findViewById(R.id.button_k),
+                buttonL = findViewById(R.id.button_l),
+                buttonM = findViewById(R.id.button_m),
+                buttonN = findViewById(R.id.button_n),
+                buttonO = findViewById(R.id.button_o),
+                buttonP = findViewById(R.id.button_p),
+                buttonQ = findViewById(R.id.button_q),
+                buttonR = findViewById(R.id.button_r),
+                buttonS = findViewById(R.id.button_s),
+                buttonT = findViewById(R.id.button_t),
+                buttonU = findViewById(R.id.button_u),
+                buttonV = findViewById(R.id.button_v),
+                buttonW = findViewById(R.id.button_w),
+                buttonX = findViewById(R.id.button_x),
+                buttonY = findViewById(R.id.button_y),
+                buttonZ = findViewById(R.id.button_z)};
         attributes = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build();
         soundPool = new SoundPool.Builder().setMaxStreams(1).setAudioAttributes(attributes).build();
         random = new Random();
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_up);
         correctAnswers = 0;
-        buttonColor= getResources().getColor(R.color.colorPrimary);
+        buttonColor = getResources().getColor(R.color.colorPrimary);
 
         buttonSound.startAnimation(animation);
         chooseRandomLetter();
@@ -96,7 +96,7 @@ public class LettersQuiz extends AppCompatActivity {
             }
         });
 
-        for (Button b:buttons) {
+        for (Button b : buttons) {
             final Button button = b;
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -118,10 +118,9 @@ public class LettersQuiz extends AppCompatActivity {
                             buttonSound.startAnimation(animation);
                             chooseRandomLetter();
                             correctAnswers++;
-                            for (Button b:buttons) {
+                            for (Button b : buttons) {
                                 b.setBackgroundColor(buttonColor);
                             }
-                            chooseRandomLetter();
                         }
                     }
                     //if not correct make button red
