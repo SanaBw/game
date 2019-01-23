@@ -75,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
         buttonDays.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // intent = new Intent(MainActivity.this, LettersActivity.class);
-                // startActivity(intent);
+                 intent = new Intent(MainActivity.this, DaysActivity.class);
+                 startActivity(intent);
             }
         });
 

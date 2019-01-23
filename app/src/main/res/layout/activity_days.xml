@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/backdays"
+    tools:context=".DaysActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="150dp"
+        android:orientation="vertical"
+        android:weightSum="7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/text_monday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/white_overlay"
+            android:gravity="center"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            app:autoSizeTextType="uniform" />
+
+        <TextView
+            android:id="@+id/text_tuesday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/white_overlay"
+            android:gravity="center"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            app:autoSizeTextType="uniform" />
+
+        <TextView
+            android:id="@+id/text_wednesday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/white_overlay"
+            android:gravity="center"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            app:autoSizeTextType="uniform" />
+
+        <TextView
+            android:id="@+id/text_thursday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/white_overlay"
+            android:gravity="center"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            app:autoSizeTextType="uniform" />
+
+        <TextView
+            android:id="@+id/text_friday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/white_overlay"
+            android:gravity="center"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            app:autoSizeTextType="uniform" />
+
+        <TextView
+            android:id="@+id/text_saturday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="@color/black_overlay"
+            android:gravity="center"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            android:textColor="@android:color/white"
+            app:autoSizeTextType="uniform" />
+
+        <TextView
+            android:id="@+id/text_sunday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1"
+            android:background="@color/black_overlay"
+            android:gravity="center"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            android:textColor="@android:color/white"
+            app:autoSizeTextType="uniform" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/image_bravo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@mipmap/bravodays" />
+</android.support.constraint.ConstraintLayout>

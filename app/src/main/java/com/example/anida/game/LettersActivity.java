@@ -22,6 +22,7 @@ public class LettersActivity extends AppCompatActivity {
     private static MediaPlayer mediaPlayer;
     private static Context context;
     private Button buttonAlphabet;
+    private boolean alphabetPlaying;
 
     public static void bravo() {
         imageBravo.setAlpha(1f); //because if it's second time to play the animation, alpha is 0f (onAnimationEnd)
@@ -77,6 +78,7 @@ public class LettersActivity extends AppCompatActivity {
         context = getApplicationContext();
         imageBravo = findViewById(R.id.image_bravo);
         rotate = AnimationUtils.loadAnimation(context, R.anim.rotate_2);
+        alphabetPlaying=false;
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager recyclerManager = new GridLayoutManager(this, 2);
@@ -87,18 +89,23 @@ public class LettersActivity extends AppCompatActivity {
         buttonAlphabet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mediaPlayer = MediaPlayer.create(context, R.raw.alphabet);
-                mediaPlayer.start();
-                buttonAlphabet.setClickable(false);
-                mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                    @Override
-                    public void onCompletion(MediaPlayer mp) {
-                        mediaPlayer.stop();
-                        mediaPlayer.release();
-                        buttonAlphabet.setClickable(true);
-                    }
-                });
-
+                if (!alphabetPlaying){
+                    mediaPlayer = MediaPlayer.create(context, R.raw.alphabet);
+                    mediaPlayer.start();
+                    alphabetPlaying = true;
+                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            mediaPlayer.stop();
+                            mediaPlayer.release();
+                            alphabetPlaying = false;
+                        }
+                    });
+                } else if(alphabetPlaying){
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    alphabetPlaying = false;
+                }
             }
         });
     }
@@ -110,6 +117,7 @@ public class LettersActivity extends AppCompatActivity {
             try {
                 mediaPlayer.stop();
                 mediaPlayer.release();
+                alphabetPlaying = false;
             } catch (Exception e) {
                 super.onBackPressed();
             }

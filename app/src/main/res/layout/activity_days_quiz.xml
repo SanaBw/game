@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/backdaysquiz"
+    tools:context=".DaysQuiz">
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="150dp"
+        android:orientation="vertical"
+        android:weightSum="7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/edit_monday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/white_overlay"
+            android:ems="10"
+            android:hint="M..."
+            android:inputType="textPersonName"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/edit_tuesday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/white_overlay"
+            android:ems="10"
+            android:hint="Tu..."
+            android:inputType="textPersonName"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/edit_wednesday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/white_overlay"
+            android:ems="10"
+            android:hint="W..."
+            android:inputType="textPersonName"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/edit_thursday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/white_overlay"
+            android:ems="10"
+            android:hint="Th..."
+            android:inputType="textPersonName"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/edit_friday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/white_overlay"
+            android:ems="10"
+            android:hint="F..."
+            android:inputType="textPersonName"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/edit_saturday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/black_overlay"
+            android:ems="10"
+            android:hint="Sa..."
+            android:inputType="textPersonName"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/white_overlay"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/edit_sunday"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="1"
+            android:background="@color/black_overlay"
+            android:ems="10"
+            android:hint="Su..."
+            android:inputType="textPersonName"
+            android:letterSpacing="0.2"
+            android:padding="10dp"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/white_overlay"
+            android:textSize="25sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/button_ok"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@color/colorPrimary"
+        android:text="OK"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
