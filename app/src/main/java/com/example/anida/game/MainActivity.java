@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
         buttonMonths.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // intent = new Intent(MainActivity.this, LettersActivity.class);
-                // startActivity(intent);
+                intent = new Intent(MainActivity.this, MonthsActivity.class);
+                startActivity(intent);
 
             }
         });
@@ -92,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
         buttonAnimals.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //intent = new Intent(MainActivity.this, LettersActivity.class);
-                // startActivity(intent);
+                intent = new Intent(MainActivity.this, AnimalsActivity.class);
+                 startActivity(intent);
             }
         });
         buttonColors.setOnClickListener(new View.OnClickListener() {

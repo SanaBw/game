@@ -110,7 +110,7 @@ public class RecyclerAdapterNumbers extends RecyclerView.Adapter<RecyclerAdapter
                             }
 
                             //if all numbers are played and learned - congrats and quiz
-                            if (sharedPreferences.getAll().size() == 21) {
+                            if (sharedPreferences.getAll().size() == getItemCount()) {
                                 editor.clear();
                                 editor.apply();
                                 NumbersActivity.bravo();

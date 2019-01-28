@@ -110,7 +110,7 @@ public class RecyclerAdapterLetters extends RecyclerView.Adapter<RecyclerAdapter
                                 editor.apply();
                             }
 
-                            if (sharedPreferences.getAll().size() == 26) {
+                            if (sharedPreferences.getAll().size() == getItemCount()) {
                                 editor.clear();
                                 editor.apply();
                                 LettersActivity.bravo();
