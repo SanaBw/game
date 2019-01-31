@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
         buttonColors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // intent = new Intent(MainActivity.this, LettersActivity.class);
-                // startActivity(intent);
+                 intent = new Intent(MainActivity.this, ColorsActivity.class);
+                 startActivity(intent);
             }
         });
 

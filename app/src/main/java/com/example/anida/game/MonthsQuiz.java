@@ -15,17 +15,16 @@ import java.util.Random;
 
 public class MonthsQuiz extends AppCompatActivity {
 
-    private String[] monthsDatasetString, monthsSeasons;
-    private int[] monthsDataset, seasonImages, randoms;
+    private Month[] months;
     private ConstraintLayout constraintLayout;
-    private TextView textSeason, textMonth1, textMonth2, textMonth3,textCorrect, textFalse;
-    ImageView imageCorrect, imageFalse;
-    int rand, numberOfQuestions;
-    Button buttonOk;
-    boolean winter, spring, summer, fall;
-    Random random;
-    int correct;
-    String season1, season2;
+    private TextView textSeason, textMonth1, textMonth2, textMonth3, textCorrect, textFalse;
+    private ImageView imageCorrect, imageFalse;
+    private int rand, numberOfQuestions;
+    private Button buttonOk;
+    private boolean winter, spring, summer, fall;
+    private Random random;
+    private int correct;
+    private String season1, season2;
 
 
     @Override
@@ -33,11 +32,7 @@ public class MonthsQuiz extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_monts_quiz);
 
-        monthsDataset = getIntent().getIntArrayExtra("monthsDataset");
-        monthsDatasetString = getIntent().getStringArrayExtra("monthsDatasetString");
-        monthsSeasons = getIntent().getStringArrayExtra("monthsSeasons");
-        seasonImages = new int[]{R.mipmap.backmonthwin, R.mipmap.backmonthwin, R.mipmap.backmonthspr, R.mipmap.backmonthspr, R.mipmap.backmonthspr, R.mipmap.backmonthsum, R.mipmap.backmonthsum, R.mipmap.backmonthsum,
-                R.mipmap.backmonthfall, R.mipmap.backmonthfall, R.mipmap.backmonthfall, R.mipmap.backmonthwin};
+        months = MonthsActivity.getMonths();
         constraintLayout = findViewById(R.id.month_quiz_layout);
         textSeason = findViewById(R.id.text_season);
         textMonth1 = findViewById(R.id.text_month1);
@@ -51,9 +46,9 @@ public class MonthsQuiz extends AppCompatActivity {
         random = new Random();
         numberOfQuestions = 0;
         season1 = "";
-        season2= "";
-        setSeason();
+        season2 = "";
 
+        setSeason();
 
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,29 +60,33 @@ public class MonthsQuiz extends AppCompatActivity {
     }
 
     private void setSeason() {
-
+        //clear buttons' texts
         textMonth1.setText("");
         textMonth2.setText("");
         textMonth3.setText("");
+        //set counters invisible
         textCorrect.setVisibility(View.INVISIBLE);
         textFalse.setVisibility(View.INVISIBLE);
         imageCorrect.setVisibility(View.INVISIBLE);
         imageFalse.setVisibility(View.INVISIBLE);
 
-
+        //chose random number until it's different from previous asked
         do {
-            rand = random.nextInt(monthsSeasons.length);
+            rand = random.nextInt(months.length);
         }
-        while (monthsSeasons[rand].equals(season1) || monthsSeasons[rand].equals(season2) );
+        while (months[rand].getSeason().equals(season1) || months[rand].getSeason().equals(season2));
 
-        if(season1.equals("")){
-            season1=monthsSeasons[rand];
+
+        if (season1.equals("")) {//if this is the first question, season1 will be empty, so set this questions answer in season1
+            season1 = months[rand].getSeason();
         } else {
-            season2=monthsSeasons[rand];
+            season2 = months[rand].getSeason();
         }
 
-        int background = seasonImages[rand];
-        String text = monthsSeasons[rand];
+        //set appropriate background and question text
+        int background = months[rand].getSeasonImage();
+        String text = months[rand].getSeason();
+
         constraintLayout.setBackgroundResource(background);
         textSeason.setText(text);
 
@@ -119,21 +118,21 @@ public class MonthsQuiz extends AppCompatActivity {
         }
 
         numberOfQuestions++;
-
     }
 
     private void checkSeason(String month1, String month2, String month3) {
         String[] textMonths = new String[]{month1, month2, month3};
         correct = 0;
-        String correct1="", correct2="";
+        String correct1 = "", correct2 = "";
 
         for (String text : textMonths) {
             if (winter) {
-                if ((text.equals("january") || text.equals("february") || text.equals("december")) && (!text.equals(correct1) && (!text.equals(correct2)))) {
-                    if (correct1.equals("")){
+                if ((text.equals("january") || text.equals("february") || text.equals("december")) && (!text.equals(correct1) && (!text.equals(correct2)))) { //if it's winter month AND if it's not repeated answer
+                    //place correct answer in empty string
+                    if (correct1.equals("")) {
                         correct1 = text;
                     } else {
-                        correct2=text;
+                        correct2 = text;
                     }
                     correct++;
                 } else {
@@ -141,10 +140,10 @@ public class MonthsQuiz extends AppCompatActivity {
                 }
             } else if (spring) {
                 if ((text.equals("march") || text.equals("april") || text.equals("may")) && (!text.equals(correct1) && (!text.equals(correct2)))) {
-                    if (correct1.equals("")){
+                    if (correct1.equals("")) {
                         correct1 = text;
                     } else {
-                        correct2=text;
+                        correct2 = text;
                     }
                     correct++;
                 } else {
@@ -152,10 +151,10 @@ public class MonthsQuiz extends AppCompatActivity {
                 }
             } else if (fall) {
                 if ((text.equals("september") || text.equals("october") || text.equals("november")) && (!text.equals(correct1) && (!text.equals(correct2)))) {
-                    if (correct1.equals("")){
+                    if (correct1.equals("")) {
                         correct1 = text;
                     } else {
-                        correct2=text;
+                        correct2 = text;
                     }
                     correct++;
                 } else {
@@ -163,22 +162,20 @@ public class MonthsQuiz extends AppCompatActivity {
                 }
             } else if (summer) {
                 if ((text.equals("june") || text.equals("july") || text.equals("august")) && (!text.equals(correct1) && (!text.equals(correct2)))) {
-                    if (correct1.equals("")){
+                    if (correct1.equals("")) {
                         correct1 = text;
                     } else {
-                        correct2=text;
+                        correct2 = text;
                     }
                     correct++;
                 } else {
                     tryAgain();
                 }
             }
-
-
         }
 
         if (correct == 3) {
-            if (numberOfQuestions == 4 ) {
+            if (numberOfQuestions == 3) {
                 finish();
             } else {
                 setSeason();
@@ -187,14 +184,13 @@ public class MonthsQuiz extends AppCompatActivity {
     }
 
     private void tryAgain() {
-
+        //show counters
         textCorrect.setVisibility(View.VISIBLE);
         textFalse.setVisibility(View.VISIBLE);
         imageCorrect.setVisibility(View.VISIBLE);
         imageFalse.setVisibility(View.VISIBLE);
 
         textCorrect.setText(Integer.toString(correct));
-        textFalse.setText(Integer.toString(3-correct));
+        textFalse.setText(Integer.toString(3 - correct));
     }
-
 }

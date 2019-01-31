@@ -20,38 +20,29 @@ import java.util.Random;
 
 class RecyclerAdapterMonths extends RecyclerView.Adapter<RecyclerAdapterMonths.ViewHolder> {
 
-    int[] monthsDataset;
-    String[] monthsDatasetString;
-    String[] monthsSeasons;
-    int[] monthsSounds;
-    int[] monthsImages;
-    int monthLayout;
-    Context context;
-    RecyclerView recyclerView;
+    private Month[] months;
+    private int monthLayout;
+    private Context context;
 
-    public RecyclerAdapterMonths(int[] monthsDataset, String[] monthsDatasetString, String[] monthsSeasons, int[] monthsSounds, int[] monthsImages, int monthLayout, Context context) {
-        this.monthsDataset = monthsDataset;
-        this.monthsDatasetString = monthsDatasetString;
-        this.monthsSeasons = monthsSeasons;
-        this.monthsSounds = monthsSounds;
-        this.monthsImages = monthsImages;
+    public RecyclerAdapterMonths(Month[] months, int monthLayout, Context context) {
+        this.months = months;
         this.monthLayout = monthLayout;
         this.context = context;
     }
-
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(monthLayout, viewGroup, false);
+
         return new RecyclerAdapterMonths.ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerAdapterMonths.ViewHolder viewHolder, int i) {
-        final int monthNumber = monthsDataset[i];
-        final String season = monthsSeasons[i];
-        int monthImage = monthsImages[i];
+        final int monthNumber = months[i].getNumber();
+        final String season = months[i].getSeason();
+        int monthImage = months[i].getImage();
 
         viewHolder.textMonth.setText(Integer.toString(monthNumber) + " " + season);
         viewHolder.imageMonth.setImageResource(monthImage);
@@ -59,16 +50,8 @@ class RecyclerAdapterMonths extends RecyclerView.Adapter<RecyclerAdapterMonths.V
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-
-       this.recyclerView = recyclerView;
-    }
-
-
-    @Override
     public int getItemCount() {
-        return monthsDataset.length;
+        return months.length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -91,11 +74,9 @@ class RecyclerAdapterMonths extends RecyclerView.Adapter<RecyclerAdapterMonths.V
                 public void onClick(View v) {
 
                     //play sound of letter pressed
-                    soundPool = new SoundPool.Builder().setMaxStreams(10)
-                            .setAudioAttributes(attributes)
-                            .build();
+                    soundPool = new SoundPool.Builder().setMaxStreams(10).setAudioAttributes(attributes).build();
+                    soundID = soundPool.load(context, months[getAdapterPosition()].getSound(), 1);
 
-                    soundID = soundPool.load(context, monthsSounds[getAdapterPosition()], 1);
                     soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
                         @Override
                         public void onLoadComplete(final SoundPool soundPool, int sampleId, int status) {
@@ -115,12 +96,13 @@ class RecyclerAdapterMonths extends RecyclerView.Adapter<RecyclerAdapterMonths.V
                             }).start();
 
                             //add as played in shared preferences if it is not already added
-                            monthPlayed = sharedPreferences.getBoolean(monthsDatasetString[getAdapterPosition()], false);
+                            monthPlayed = sharedPreferences.getBoolean(months[getAdapterPosition()].getMonth(), false);
                             if (!monthPlayed) {
-                                editor.putBoolean(monthsDatasetString[getAdapterPosition()], true);
+                                editor.putBoolean(months[getAdapterPosition()].getMonth(), true);
                                 editor.apply();
                             }
 
+                            //if all months are played, clear shared prefs and start congrats and quiz
                             if (sharedPreferences.getAll().size() == getItemCount()) {
                                 editor.clear();
                                 editor.apply();
@@ -130,7 +112,6 @@ class RecyclerAdapterMonths extends RecyclerView.Adapter<RecyclerAdapterMonths.V
                     });
                 }
             });
-
         }
     }
 }

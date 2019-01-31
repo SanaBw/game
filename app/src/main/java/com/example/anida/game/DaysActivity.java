@@ -16,26 +16,31 @@ import android.widget.TextView;
 
 public class DaysActivity extends AppCompatActivity {
 
-    TextView[] textViews;
-    TextView monday, tuesday, wednesday, thursday, friday, saturday, sunday;
-    Animation flip, bounceUp;
-    int soundID;
-    SoundPool soundPool;
-    AudioAttributes attributes;
-    SharedPreferences sharedPreferences;
-    SharedPreferences.Editor editor;
-    private String[] days;
-    private int[] daysSounds;
-    ImageView imageBravo;
-    MediaPlayer mediaPlayer;
+    private Day mon, tue, wed, thu, fri, sat, sun;
+    private static Day[] days;
+    private TextView[] textViews;
+    private TextView monday, tuesday, wednesday, thursday, friday, saturday, sunday;
+    private Animation flip, bounceUp;
+    private int soundID;
+    private SoundPool soundPool;
+    private AudioAttributes attributes;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private ImageView imageBravo;
+    private MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_days);
 
-        days = new String[]{"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-        daysSounds = new int[]{R.raw.monday, R.raw.tuesday, R.raw.wednesday, R.raw.thursday, R.raw.friday, R.raw.saturday, R.raw.sunday};
+        mon = new Day("Monday", R.raw.monday);
+        tue = new Day("Tuesday", R.raw.tuesday);
+        wed = new Day("Wednesday", R.raw.wednesday);
+        thu = new Day("Thursday", R.raw.thursday);
+        fri = new Day("Friday", R.raw.friday);
+        sat = new Day("Saturday", R.raw.saturday);
+        sun = new Day("Sunday", R.raw.sunday);
         monday = findViewById(R.id.text_monday);
         tuesday = findViewById(R.id.text_tuesday);
         wednesday = findViewById(R.id.text_wednesday);
@@ -43,6 +48,7 @@ public class DaysActivity extends AppCompatActivity {
         friday = findViewById(R.id.text_friday);
         saturday = findViewById(R.id.text_saturday);
         sunday = findViewById(R.id.text_sunday);
+        days = new Day[]{mon, tue, wed, thu, fri, sat, sun};
         textViews = new TextView[]{monday, tuesday, wednesday, thursday, friday, saturday, sunday};
         flip = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.flip);
         bounceUp = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_up_slower);
@@ -50,12 +56,12 @@ public class DaysActivity extends AppCompatActivity {
         soundPool = new SoundPool.Builder().setMaxStreams(1).setAudioAttributes(attributes).build();
         sharedPreferences = getSharedPreferences("DaysDone", Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
-        imageBravo=findViewById(R.id.image_bravo);
+        imageBravo = findViewById(R.id.image_bravo_rainbow);
 
-        //each button set text of day and onclicklistener
-        for (int i = 0; i <= 6; i++) {
+        //set text of day and onclicklistener for each button
+        for (int i = 0; i < days.length; i++) {
             final int index = i;
-            textViews[i].setText(days[i]);
+            textViews[i].setText(days[i].getDay());
             textViews[i].setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -65,10 +71,11 @@ public class DaysActivity extends AppCompatActivity {
         }
     }
 
-    public void putInSP(int i) {
-        editor.putBoolean(days[i], true);
+    public void putInSharedPreferences(int i) {
+        editor.putBoolean(days[i].getDay(), true);
         editor.apply();
-        if (sharedPreferences.getAll().size() == 7) {
+        //if all days are played, clear shared prefs and play congrats and quiz
+        if (sharedPreferences.getAll().size() == days.length) {
             editor.clear();
             editor.apply();
             bravo();
@@ -78,12 +85,12 @@ public class DaysActivity extends AppCompatActivity {
     public void playAnimationAndSound(int i) {
         final int index = i;
         textViews[i].startAnimation(flip);
-        soundID = soundPool.load(getApplicationContext(), daysSounds[index], 1);
+        soundID = soundPool.load(getApplicationContext(), days[index].getSound(), 1);
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
             public void onLoadComplete(final SoundPool soundPool, int sampleId, int status) {
                 soundPool.play(soundID, 1, 1, 1, 0, 1f);
-                putInSP(index);
+                putInSharedPreferences(index);
             }
         });
     }
@@ -110,15 +117,19 @@ public class DaysActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
-
                 //start the quiz
                 Intent intent = new Intent(getApplicationContext(), DaysQuiz.class);
                 startActivity(intent);
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {
+            }
         });
+    }
+
+    public static Day[] getDays() {
+        return days;
     }
 }
 

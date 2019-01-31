@@ -19,14 +19,11 @@ public class RecyclerAdapterAnimals extends RecyclerView.Adapter<RecyclerAdapter
     private int animalsLayout;
     private Context context;
 
-
     public RecyclerAdapterAnimals(Animal[] animals, int animalsLayout, Context context) {
         this.animals = animals;
         this.animalsLayout = animalsLayout;
         this.context = context;
-
     }
-
 
     @NonNull
     @Override
@@ -40,7 +37,6 @@ public class RecyclerAdapterAnimals extends RecyclerView.Adapter<RecyclerAdapter
     @Override
     public void onBindViewHolder(@NonNull AnimalViewHolder holder, int i) {
         holder.bindAnimal(animals[i]);
-
     }
 
     @Override
@@ -69,17 +65,16 @@ public class RecyclerAdapterAnimals extends RecyclerView.Adapter<RecyclerAdapter
 
         public void bindAnimal(final Animal animal) {
             textAnimal.setText(animal.getName());
-            imageAnimal.setImageResource(animal.getPicture());
+            imageAnimal.setImageResource(animal.getImage());
 
+            //pronunciation of animal
             buttonSound.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     animalSound = animal.getPronunciation();
-                    soundPool = new SoundPool.Builder().setMaxStreams(2)
-                            .setAudioAttributes(attributes)
-                            .build();
-
+                    soundPool = new SoundPool.Builder().setMaxStreams(2).setAudioAttributes(attributes).build();
                     soundID = soundPool.load(context, animalSound, 1);
+
                     soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
                         @Override
                         public void onLoadComplete(final SoundPool soundPool, int sampleId, int status) {
@@ -103,56 +98,54 @@ public class RecyclerAdapterAnimals extends RecyclerView.Adapter<RecyclerAdapter
                             if (!animalPlayed) {
                                 editor.putBoolean(animal.getName(), true);
                                 editor.apply();
-                                System.out.println(sharedPreferences.getAll().size());
                             }
 
                             //if all animal pronunciations are played and learned - congrats and quiz
                             if (sharedPreferences.getAll().size() == getItemCount()) {
                                 editor.clear();
                                 editor.apply();
-                                //AnimalsActivity.bravo();
-                                System.out.println("BRAVOOO");
+                                AnimalsActivity.bravo();
                             }
-
                         }
                     });
                 }
             });
 
-                imageAnimal.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
+            //sound that animal makes
+            imageAnimal.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!animal.hasSound()) {
+                        animalSound = R.raw.nosound;
+                    } else {
                         animalSound = animal.getSound();
-                        soundPool = new SoundPool.Builder().setMaxStreams(2)
-                                .setAudioAttributes(attributes)
-                                .build();
-
-                        soundID = soundPool.load(context, animalSound, 1);
-                        soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
-                            @Override
-                            public void onLoadComplete(final SoundPool soundPool, int sampleId, int status) {
-                                soundPool.play(soundID, 1, 1, 1, 0, 1f);
-
-                                //release object after playing the sound
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            Thread.sleep(3000);
-                                            soundPool.release();
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }).start();
-                            }
-                        });
                     }
-                });
-            }
+                    soundPool = new SoundPool.Builder().setMaxStreams(2).setAudioAttributes(attributes).build();
+                    soundID = soundPool.load(context, animalSound, 1);
 
+                    soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
+                        @Override
+                        public void onLoadComplete(final SoundPool soundPool, int sampleId, int status) {
+                            soundPool.play(soundID, 1, 1, 1, 0, 1f);
+
+                            //release object after playing the sound
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(3000);
+                                        soundPool.release();
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }).start();
+                        }
+                    });
+                }
+            });
         }
     }
+}
 
 

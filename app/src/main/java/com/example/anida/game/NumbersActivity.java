@@ -16,15 +16,53 @@ import android.widget.ImageView;
 
 public class NumbersActivity extends AppCompatActivity {
 
-    static ImageView imageBravo2;
-    static Animation fadeIn;
-    static MediaPlayer mediaPlayer;
-    static Context context;
-    private static String[] numbersDataset, numbersString;
-    private static int[] numbersSounds, numbersImages;
+    private Number zero, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty;
+    private static Number[] numbers;
+    private static ImageView imageBravo2;
+    private static Animation fadeIn;
+    private static MediaPlayer mediaPlayer;
+    private static Context context;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_numbers);
+        zero = new Number("zero", 0, R.raw.number0, R.color.black_overlay);
+        one = new Number("one", 1, R.raw.number1, R.mipmap.one);
+        two = new Number("two", 2, R.raw.number2, R.mipmap.two);
+        three = new Number("three", 3, R.raw.number3, R.mipmap.three);
+        four = new Number("four", 4, R.raw.number4, R.mipmap.four);
+        five = new Number("five", 5, R.raw.number5, R.mipmap.five);
+        six = new Number("six", 6, R.raw.number6, R.mipmap.six);
+        seven = new Number("seven", 7, R.raw.number7, R.mipmap.seven);
+        eight = new Number("eight", 8, R.raw.number8, R.mipmap.eight);
+        nine = new Number("nine", 9, R.raw.number9, R.mipmap.nine);
+        ten = new Number("ten", 10, R.raw.number10, R.mipmap.ten);
+        eleven = new Number("eleven", 11, R.raw.number11, R.mipmap.eleven);
+        twelve = new Number("twelve", 12, R.raw.number12, R.mipmap.twelve);
+        thirteen = new Number("thirteen", 13, R.raw.number13, R.mipmap.thirteen);
+        fourteen = new Number("fourteen", 14, R.raw.number14, R.mipmap.fourteen);
+        fifteen = new Number("fifteen", 15, R.raw.number15, R.mipmap.fifteen);
+        sixteen = new Number("sixteen", 16, R.raw.number16, R.mipmap.sixteen);
+        seventeen = new Number("seventeen", 17, R.raw.number17, R.mipmap.seventeen);
+        eighteen = new Number("eighteen", 18, R.raw.number18, R.mipmap.eighteen);
+        nineteen = new Number("nineteen", 19, R.raw.number19, R.mipmap.nineteen);
+        twenty = new Number("twenty", 20, R.raw.number20, R.mipmap.twenty);
+        numbers = new Number[]{zero, one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen, nineteen, twenty};
+        imageBravo2 = findViewById(R.id.image_bravo_two);
+        fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        context = getApplicationContext();
+        RecyclerView recyclerView = findViewById(R.id.recycler_view_numbers);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        RecyclerView.Adapter adapterNumbers = new RecyclerAdapterNumbers(numbers, R.layout.number, context);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapterNumbers);
+    }
 
     public static void bravo() {
-
         imageBravo2.startAnimation(fadeIn);
         fadeIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -42,37 +80,16 @@ public class NumbersActivity extends AppCompatActivity {
 
                 //start the quiz
                 Intent intent = new Intent(context, NumbersQuiz.class);
-                intent.putExtra("numbersDataset", numbersDataset);
-                intent.putExtra("numbersString", numbersString);
-                intent.putExtra("numbersImages", numbersImages);
-                intent.putExtra("numbersSounds", numbersSounds);
                 context.startActivity(intent);
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) { }
+            public void onAnimationRepeat(Animation animation) {
+            }
         });
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_numbers);
-
-        numbersDataset = new String[]{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"};
-        numbersString = new String[]{"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty"};
-        numbersSounds = new int[]{R.raw.number0, R.raw.number1, R.raw.number2, R.raw.number3, R.raw.number4, R.raw.number5, R.raw.number6, R.raw.number7, R.raw.number8, R.raw.number9, R.raw.number10, R.raw.number11,
-                R.raw.number12, R.raw.number13, R.raw.number14, R.raw.number15, R.raw.number16, R.raw.number17, R.raw.number18, R.raw.number19, R.raw.number20};
-        numbersImages = new int[]{R.color.black_overlay, R.mipmap.one, R.mipmap.two, R.mipmap.three, R.mipmap.four, R.mipmap.five, R.mipmap.six, R.mipmap.seven, R.mipmap.eight, R.mipmap.nine, R.mipmap.ten, R.mipmap.eleven,
-                R.mipmap.twelve, R.mipmap.thirteen, R.mipmap.fourteen, R.mipmap.fifteen, R.mipmap.sixteen, R.mipmap.seventeen, R.mipmap.eighteen, R.mipmap.nineteen, R.mipmap.twenty};
-        imageBravo2 = findViewById(R.id.image_bravo_two);
-        fadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        context = getApplicationContext();
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_numbers);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-        RecyclerView.Adapter adapterNumbers = new RecyclerAdapterNumbers(numbersDataset, numbersString, numbersSounds, numbersImages, R.layout.number, context);
-        recyclerView.setAdapter(adapterNumbers);
+    public static Number[] getNumbers() {
+        return numbers;
     }
 }

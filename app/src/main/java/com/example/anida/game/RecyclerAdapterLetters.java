@@ -17,42 +17,36 @@ import java.util.Random;
 
 public class RecyclerAdapterLetters extends RecyclerView.Adapter<RecyclerAdapterLetters.ViewHolder> {
 
-    private String[] items;
-    private int[] itemsImages;
-    private int itemLayout;
-    private int[] itemsSounds;
+    private Letter[] letters;
+    private int lettersLayout;
     private Context context;
 
-
-    public RecyclerAdapterLetters(String[] items, int[] itemsImages, int itemLayout, int[] itemsSounds, Context context) {
-        this.items = items;
-        this.itemsImages = itemsImages;
-        this.itemLayout = itemLayout;
-        this.itemsSounds = itemsSounds;
+    public RecyclerAdapterLetters(Letter[] letters, int lettersLayout, Context context) {
+        this.letters = letters;
+        this.lettersLayout = lettersLayout;
         this.context = context;
     }
-
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(itemLayout, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(lettersLayout, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        int itemImage = itemsImages[position];
+        int itemImage = letters[position].getImage();
         holder.image.setImageResource(itemImage);
     }
 
     @Override
     public int getItemCount() {
-        return items.length;
+        return letters.length;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        int itemSound;
+        int letterSound;
         ImageView image;
         int[] animationResources = {R.anim.bounce_down, R.anim.bounce_up, R.anim.bounce_left, R.anim.bounce_right};
         SharedPreferences sharedPreferences = context.getSharedPreferences("LettersDone", Context.MODE_PRIVATE);
@@ -70,7 +64,6 @@ public class RecyclerAdapterLetters extends RecyclerView.Adapter<RecyclerAdapter
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     //randomize animation
                     Random random = new Random();
                     random.nextInt();
@@ -79,12 +72,10 @@ public class RecyclerAdapterLetters extends RecyclerView.Adapter<RecyclerAdapter
                     image.startAnimation(animation);
 
                     //play sound of letter pressed
-                    itemSound = itemsSounds[getAdapterPosition()];
-                    soundPool = new SoundPool.Builder().setMaxStreams(10)
-                            .setAudioAttributes(attributes)
-                            .build();
+                    letterSound = letters[getAdapterPosition()].getSound();
+                    soundPool = new SoundPool.Builder().setMaxStreams(10).setAudioAttributes(attributes).build();
 
-                    soundID = soundPool.load(context, itemSound, 1);
+                    soundID = soundPool.load(context, letterSound, 1);
                     soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
                         @Override
                         public void onLoadComplete(final SoundPool soundPool, int sampleId, int status) {
@@ -104,12 +95,13 @@ public class RecyclerAdapterLetters extends RecyclerView.Adapter<RecyclerAdapter
                             }).start();
 
                             //add as played in shared preferences if it is not already added
-                            letterPlayed = sharedPreferences.getBoolean(items[getAdapterPosition()], false);
+                            letterPlayed = sharedPreferences.getBoolean(letters[getAdapterPosition()].getLetter(), false);
                             if (!letterPlayed) {
-                                editor.putBoolean(items[getAdapterPosition()], true);
+                                editor.putBoolean(letters[getAdapterPosition()].getLetter(), true);
                                 editor.apply();
                             }
 
+                            //if each letter is played, clear shared prefs and play congrats and quiz
                             if (sharedPreferences.getAll().size() == getItemCount()) {
                                 editor.clear();
                                 editor.apply();

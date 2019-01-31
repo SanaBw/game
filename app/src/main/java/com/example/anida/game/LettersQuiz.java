@@ -14,27 +14,25 @@ import java.util.Random;
 
 public class LettersQuiz extends AppCompatActivity {
 
-    String[] lettersDataset;
-    int[] lettersSounds;
-    Button buttonSound, buttonA, buttonB, buttonC, buttonD, buttonE, buttonF, buttonG, buttonH, buttonI, buttonJ, buttonK, buttonL, buttonM, buttonN, buttonO, buttonP, buttonQ, buttonR, buttonS, buttonT, buttonU, buttonV,
+    private Letter[] letters;
+    private Button buttonSound, buttonA, buttonB, buttonC, buttonD, buttonE, buttonF, buttonG, buttonH, buttonI, buttonJ, buttonK, buttonL, buttonM, buttonN, buttonO, buttonP, buttonQ, buttonR, buttonS, buttonT, buttonU, buttonV,
             buttonW, buttonX, buttonY, buttonZ, buttonExit;
-    Button[] buttons;
-    SoundPool soundPool;
-    int soundID, randomInt, randomLetterSound;
-    AudioAttributes attributes;
-    Random random;
-    String letterPlaying;
-    Animation animation;
-    int correctAnswers;
-    int buttonColor;
+    private Button[] buttons;
+    private SoundPool soundPool;
+    private int soundID, randomInt, randomLetterSound;
+    private AudioAttributes attributes;
+    private Random random;
+    private String letterPlaying;
+    private Animation animation;
+    private int correctAnswers;
+    private int buttonColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_letters_quiz);
 
-        lettersDataset = getIntent().getStringArrayExtra("lettersDataset");
-        lettersSounds = getIntent().getIntArrayExtra("lettersSounds");
+        letters = LettersActivity.getLetters();
         buttonSound = findViewById(R.id.button_question);
         buttonExit = findViewById(R.id.button_exit);
         buttons = new Button[]{
@@ -92,10 +90,11 @@ public class LettersQuiz extends AppCompatActivity {
                         soundPool.play(soundID, 1, 1, 1, 0, 1f);
                     }
                 });
-                letterPlaying = lettersDataset[randomInt];
+                letterPlaying = letters[randomInt].getLetter();
             }
         });
 
+        //onclicklistener for each letter button to play sound and animation
         for (Button b : buttons) {
             final Button button = b;
             b.setOnClickListener(new View.OnClickListener() {
@@ -135,8 +134,8 @@ public class LettersQuiz extends AppCompatActivity {
 
     public void chooseRandomLetter() {
         random.nextInt();
-        randomInt = random.nextInt(lettersSounds.length);
-        randomLetterSound = lettersSounds[randomInt];
+        randomInt = random.nextInt(letters.length);
+        randomLetterSound = letters[randomInt].getSound();
         soundID = soundPool.load(getApplicationContext(), randomLetterSound, 1);
         soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
             @Override
@@ -144,7 +143,7 @@ public class LettersQuiz extends AppCompatActivity {
                 soundPool.play(soundID, 1, 1, 1, 0, 1f);
             }
         });
-        letterPlaying = lettersDataset[randomInt];
+        letterPlaying = letters[randomInt].getLetter();
     }
 }
 

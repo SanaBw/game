@@ -21,41 +21,46 @@ import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
 public class MonthsActivity extends AppCompatActivity {
 
-    static ImageView imageBravo;
-    static Animation fadeIn;
-    static MediaPlayer mediaPlayer;
-    static Context context;
-    private static String[] monthsDatasetString, monthsSeasons;
-    private static int[] monthsDataset, monthsSounds, monthsImages;
-    RecyclerView recyclerView;
-    LinearLayoutManager layoutManager;
+    private Month jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec;
+    private static Month[] months;
+    private static ImageView imageBravo;
+    private static Animation fadeIn;
+    private static MediaPlayer mediaPlayer;
+    private static Context context;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_months);
 
+        jan = new Month("january", 1, "winter", R.mipmap.backmonthwin, R.mipmap.january, R.raw.january);
+        feb = new Month("february", 2, "winter", R.mipmap.backmonthwin, R.mipmap.february, R.raw.february);
+        mar = new Month("march", 3, "spring", R.mipmap.backmonthspr, R.mipmap.march, R.raw.march);
+        apr = new Month("april", 4, "spring", R.mipmap.backmonthspr, R.mipmap.april, R.raw.april);
+        may = new Month("may", 5, "spring", R.mipmap.backmonthspr, R.mipmap.may, R.raw.may);
+        jun = new Month("june", 6, "summer", R.mipmap.backmonthsum, R.mipmap.june, R.raw.june);
+        jul = new Month("july", 7, "summer", R.mipmap.backmonthsum, R.mipmap.july, R.raw.july);
+        aug = new Month("august", 8, "summer", R.mipmap.backmonthsum, R.mipmap.august, R.raw.august);
+        sep = new Month("september", 9, "autumn/fall", R.mipmap.backmonthfall, R.mipmap.september, R.raw.september);
+        oct = new Month("october", 10, "autumn/fall", R.mipmap.backmonthfall, R.mipmap.october, R.raw.october);
+        nov = new Month("november", 11, "autumn/fall", R.mipmap.backmonthfall, R.mipmap.november, R.raw.november);
+        dec = new Month("december", 12, "winter", R.mipmap.backmonthwin, R.mipmap.december, R.raw.december);
+        months = new Month[]{jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec};
         context = getApplicationContext();
-        monthsDataset = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-        monthsDatasetString = new String[]{"january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
-        monthsSeasons = new String[]{"winter", "winter", "spring", "spring", "spring", "summer", "summer", "summer", "autumn/fall", "autumn/fall", "autumn/fall", "winter"};
-        monthsSounds = new int[]{R.raw.january, R.raw.february, R.raw.march, R.raw.april, R.raw.may, R.raw.june, R.raw.july, R.raw.august, R.raw.september, R.raw.october, R.raw.november, R.raw.december};
-        monthsImages = new int[]{R.mipmap.january, R.mipmap.february, R.mipmap.march, R.mipmap.april, R.mipmap.may, R.mipmap.june, R.mipmap.july, R.mipmap.august, R.mipmap.september, R.mipmap.october,
-                R.mipmap.november, R.mipmap.december};
-        imageBravo=findViewById(R.id.image_bravo_months);
+        imageBravo = findViewById(R.id.image_bravo_months);
         fadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in);
         recyclerView = findViewById(R.id.recycler_view_months);
-        recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
+        RecyclerView.Adapter adapterNumbers = new RecyclerAdapterMonths(months, R.layout.month, context);
+
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-        final RecyclerView.Adapter adapterNumbers = new RecyclerAdapterMonths(monthsDataset, monthsDatasetString, monthsSeasons, monthsSounds, monthsImages, R.layout.month, context);
         recyclerView.setAdapter(adapterNumbers);
-
-
     }
 
     public static void bravo() {
-
         imageBravo.startAnimation(fadeIn);
         fadeIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -73,14 +78,16 @@ public class MonthsActivity extends AppCompatActivity {
 
                 //start the quiz
                 Intent intent = new Intent(context, MonthsQuiz.class);
-                intent.putExtra("monthsDataset",monthsDataset);
-                intent.putExtra("monthsDatasetString",monthsDatasetString);
-                intent.putExtra("monthsSeasons",monthsSeasons);
                 context.startActivity(intent);
             }
 
             @Override
-            public void onAnimationRepeat(Animation animation) { }
+            public void onAnimationRepeat(Animation animation) {
+            }
         });
+    }
+
+    public static Month[] getMonths() {
+        return months;
     }
 }

@@ -14,30 +14,26 @@ import android.widget.ImageView;
 import java.util.Random;
 
 public class NumbersQuiz extends AppCompatActivity {
-    String[] numbersDataset;
-    String[] numbersString;
-    int[] numbersImages;
-    int[] numbersSounds;
-    ImageView imageNumber;
-    Button button1, button2, button3, buttonExit;
-    Button[] buttons;
-    SoundPool soundPool;
-    int soundID, randomInt, randomInt2, randomInt3, randomNumberImage;
-    AudioAttributes attributes;
-    Random random, randomButton, randomRest;
-    String correctAnswer;
-    Animation animation;
-    int correctAnswers;
-    int buttonColor;
+
+    private Number[] numbers;
+    private ImageView imageNumber;
+    private Button button1, button2, button3, buttonExit;
+    private Button[] buttons;
+    private SoundPool soundPool;
+    private int soundID, randomInt, randomInt2, randomInt3, randomNumberImage;
+    private AudioAttributes attributes;
+    private Random random, randomButton, randomRest;
+    private String correctAnswer;
+    private Animation animation;
+    private int correctAnswers;
+    private int buttonColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers_quiz);
-        numbersDataset = getIntent().getStringArrayExtra("numbersDataset");
-        numbersString = getIntent().getStringArrayExtra("numbersString");
-        numbersImages = getIntent().getIntArrayExtra("numbersImages");
-        numbersSounds = getIntent().getIntArrayExtra("numbersSounds");
+
+        numbers = NumbersActivity.getNumbers();
         imageNumber = findViewById(R.id.image_question);
         button1 = findViewById(R.id.button);
         button2 = findViewById(R.id.button2);
@@ -63,6 +59,7 @@ public class NumbersQuiz extends AppCompatActivity {
             }
         });
 
+        //set onclicklistener for each answer button
         for (final Button b : buttons) {
             b.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -70,7 +67,7 @@ public class NumbersQuiz extends AppCompatActivity {
                     //if answer is correct, either next question or congrats
                     if (b.getText().equals(correctAnswer)) {
                         correctAnswers++;
-                        if (correctAnswers == 4) { //congrats
+                        if (correctAnswers == 4) { //congrats after 4th correct answer
                             soundID = soundPool.load(getApplicationContext(), R.raw.claps, 1);
                             soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
                                 @Override
@@ -98,16 +95,16 @@ public class NumbersQuiz extends AppCompatActivity {
         }
 
         //choose random number and its image
-        randomInt = random.nextInt(numbersImages.length);
-        randomNumberImage = numbersImages[randomInt];
+        randomInt = random.nextInt(numbers.length);
+        randomNumberImage = numbers[randomInt].getImage();
         imageNumber.setImageResource(randomNumberImage);
         imageNumber.startAnimation(animation);
 
-        //first two questions with numbers, next two with words of number
+        //first two questions with numbers, next two with words of number - set correct
         if (correctAnswers < 2) {
-            correctAnswer = numbersDataset[randomInt];
+            correctAnswer = (String.valueOf(numbers[randomInt].getNumber()));
         } else {
-            correctAnswer = numbersString[randomInt];
+            correctAnswer = numbers[randomInt].getString();
         }
 
         //choose random button to place correct answer
@@ -116,11 +113,11 @@ public class NumbersQuiz extends AppCompatActivity {
             buttons[randomInt2].setText(correctAnswer);
         }
 
-        //place random numbers in the rest of the buttons
+        //place random numbers in the rest of the buttons which are empty
         for (int i = 0; i < 3; i++) {
             if (buttons[i].getText().equals("")) {
-                randomInt3 = randomRest.nextInt(numbersImages.length);
-                //if random is same as correct answer, we don't wanna duplicate it
+                randomInt3 = randomRest.nextInt(numbers.length);
+                //if random is same as correct answer, change it (add or subtract 1)
                 if (randomInt3 == randomInt) {
                     if (randomInt != 20) { //if it's not number 20, add 1
                         randomInt3 = randomInt + 1;
@@ -129,14 +126,13 @@ public class NumbersQuiz extends AppCompatActivity {
                     }
                 }
 
-                //first two questions with numbers, next two with words of number
+                //first two questions with numbers, next two with words of number - set text to buttons
                 if (correctAnswers < 2) {
                     buttons[i].setText(Integer.toString(randomInt3)); //had some issues with .setText, so converted int to string
                 } else {
-                    buttons[i].setText(numbersString[randomInt3]);
+                    buttons[i].setText(numbers[randomInt3].getString());
                 }
             }
         }
-
     }
 }

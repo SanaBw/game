@@ -4,14 +4,24 @@ public class Animal {
 
     private String name;
     private int sound;
-    private int picture;
+    private int image;
     private int pronunciation;
+    private boolean hasSound;
 
-    public Animal(String name, int sound, int pronunciation, int picture){
+    public Animal(String name, int sound,int pronunciation, int image){
         this.name=name;
         this.sound=sound;
         this.pronunciation=pronunciation;
-        this.picture=picture;
+        this.image=image;
+        this.hasSound=true;
+    }
+
+    public Animal(String name, int sound, boolean hasSound, int pronunciation, int image){
+        this.name=name;
+        this.sound=sound;
+        this.pronunciation=pronunciation;
+        this.image=image;
+        this.hasSound=hasSound;
     }
 
     public String getName() {
@@ -38,11 +48,19 @@ public class Animal {
         this.pronunciation = pronunciation;
     }
 
-    public int getPicture() {
-        return picture;
+    public int getImage() {
+        return image;
     }
 
-    public void setPicture(int picture) {
-        this.picture = picture;
+    public void setImage(int image) {
+        this.image = image;
+    }
+
+    public boolean hasSound() {
+        return hasSound;
+    }
+
+    public void hasSound(boolean hasSound) {
+        this.hasSound = hasSound;
     }
 }

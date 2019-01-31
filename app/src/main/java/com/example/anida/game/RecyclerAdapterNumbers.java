@@ -15,21 +15,14 @@ import android.widget.TextView;
 
 public class RecyclerAdapterNumbers extends RecyclerView.Adapter<RecyclerAdapterNumbers.ViewHolder> {
 
-    private String[] items;
-    private int[] itemsImages;
+    private Number[] items;
     private int itemLayout;
-    private int[] itemsSounds;
     private Context context;
-    private String[] itemsString;
 
-    public RecyclerAdapterNumbers(String[] items, String[] itemsString, int[] itemsSounds, int[] itemsImages, int itemLayout, Context context) {
+    public RecyclerAdapterNumbers(Number[] items, int itemLayout, Context context) {
         this.items = items;
-        this.itemsString = itemsString;
-        this.itemsSounds = itemsSounds;
-        this.itemsImages = itemsImages;
         this.itemLayout = itemLayout;
         this.context = context;
-
     }
 
     @NonNull
@@ -41,14 +34,13 @@ public class RecyclerAdapterNumbers extends RecyclerView.Adapter<RecyclerAdapter
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        String number = items[i];
-        String numberString = itemsString[i];
-        int numberImage = itemsImages[i];
+        String value = String.valueOf(items[i].getNumber());
+        String itemString = items[i].getString();
+        int itemImage = items[i].getImage();
 
-        viewHolder.textNumberString.setText(numberString);
-        viewHolder.textNumber.setText(number);
-
-        viewHolder.imageNumber.setImageResource(numberImage);
+        viewHolder.textNumberString.setText(itemString);
+        viewHolder.textNumber.setText(value);
+        viewHolder.imageNumber.setImageResource(itemImage);
     }
 
     @Override
@@ -77,13 +69,11 @@ public class RecyclerAdapterNumbers extends RecyclerView.Adapter<RecyclerAdapter
             buttonSound.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //play sound of letter pressed
-                    itemSound = itemsSounds[getAdapterPosition()];
-                    soundPool = new SoundPool.Builder().setMaxStreams(2)
-                            .setAudioAttributes(attributes)
-                            .build();
-
+                    //play sound of number pressed
+                    itemSound = items[getAdapterPosition()].getSound();
+                    soundPool = new SoundPool.Builder().setMaxStreams(2).setAudioAttributes(attributes).build();
                     soundID = soundPool.load(context, itemSound, 1);
+
                     soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
                         @Override
                         public void onLoadComplete(final SoundPool soundPool, int sampleId, int status) {
@@ -103,9 +93,9 @@ public class RecyclerAdapterNumbers extends RecyclerView.Adapter<RecyclerAdapter
                             }).start();
 
                             //add number as played in shared preferences if it is not already added
-                            numberPlayed = sharedPreferences.getBoolean(items[getAdapterPosition()], false);
+                            numberPlayed = sharedPreferences.getBoolean(items[getAdapterPosition()].getString(), false);
                             if (!numberPlayed) {
-                                editor.putBoolean(items[getAdapterPosition()], true);
+                                editor.putBoolean(items[getAdapterPosition()].getString(), true);
                                 editor.apply();
                             }
 
@@ -115,7 +105,6 @@ public class RecyclerAdapterNumbers extends RecyclerView.Adapter<RecyclerAdapter
                                 editor.apply();
                                 NumbersActivity.bravo();
                             }
-
                         }
                     });
                 }
