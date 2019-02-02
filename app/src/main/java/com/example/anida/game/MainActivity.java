@@ -107,8 +107,16 @@ public class MainActivity extends AppCompatActivity {
         buttonQuizes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //intent = new Intent(MainActivity.this, LettersActivity.class);
-                // startActivity(intent);
+                intent = new Intent(MainActivity.this, QuizesActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        imageGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(MainActivity.this, GameActivity.class);
+                startActivity(intent);
             }
         });
 

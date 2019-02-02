@@ -67,8 +67,8 @@ public class ColorsActivity extends AppCompatActivity {
                 mediaPlayer.release();
 
                 //start the quiz
-                //Intent intent = new Intent(context, NumbersQuiz.class);
-                //context.startActivity(intent);
+                Intent intent = new Intent(context, ColorsQuiz.class);
+                context.startActivity(intent);
             }
 
             @Override
