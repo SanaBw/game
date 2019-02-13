@@ -1,5 +1,7 @@
 package com.example.anida.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +13,9 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 public class MonthsQuiz extends AppCompatActivity {
@@ -23,8 +28,10 @@ public class MonthsQuiz extends AppCompatActivity {
     private Button buttonOk;
     private boolean winter, spring, summer, fall;
     private Random random;
-    private int correct;
+    private int correct, correctTotal, incorrectTotal;
     private String season1, season2;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
 
     @Override
@@ -45,8 +52,18 @@ public class MonthsQuiz extends AppCompatActivity {
         imageFalse = findViewById(R.id.image_false);
         random = new Random();
         numberOfQuestions = 0;
+        correctTotal = 0;
+        incorrectTotal = 0;
         season1 = "";
         season2 = "";
+        sharedPreferences = getSharedPreferences("MonthsProgress", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
+        if (!(sharedPreferences.getString("today", "").equals(date))) {
+            editor.clear();
+            editor.apply();
+        }
 
         setSeason();
 
@@ -135,7 +152,9 @@ public class MonthsQuiz extends AppCompatActivity {
                         correct2 = text;
                     }
                     correct++;
+                    correctTotal++;
                 } else {
+                    incorrectTotal++;
                     tryAgain();
                 }
             } else if (spring) {
@@ -145,8 +164,10 @@ public class MonthsQuiz extends AppCompatActivity {
                     } else {
                         correct2 = text;
                     }
+                    correctTotal++;
                     correct++;
                 } else {
+                    incorrectTotal++;
                     tryAgain();
                 }
             } else if (fall) {
@@ -156,8 +177,10 @@ public class MonthsQuiz extends AppCompatActivity {
                     } else {
                         correct2 = text;
                     }
+                    correctTotal++;
                     correct++;
                 } else {
+                    incorrectTotal++;
                     tryAgain();
                 }
             } else if (summer) {
@@ -167,8 +190,10 @@ public class MonthsQuiz extends AppCompatActivity {
                     } else {
                         correct2 = text;
                     }
+                    correctTotal++;
                     correct++;
                 } else {
+                    incorrectTotal++;
                     tryAgain();
                 }
             }
@@ -176,6 +201,7 @@ public class MonthsQuiz extends AppCompatActivity {
 
         if (correct == 3) {
             if (numberOfQuestions == 3) {
+                Stats.saveProgress(sharedPreferences, correctTotal, incorrectTotal);
                 finish();
             } else {
                 setSeason();

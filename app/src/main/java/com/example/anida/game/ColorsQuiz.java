@@ -1,5 +1,7 @@
 package com.example.anida.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 public class ColorsQuiz extends AppCompatActivity {
@@ -17,7 +22,7 @@ public class ColorsQuiz extends AppCompatActivity {
     private Button buttonAnswer1, buttonAnswer2, buttonAnswer3;
     private Button[] buttons;
     private TextView textAnd;
-    private int correctAnswers, correctImage, i, x, randomInt, soundID;
+    private int correctAnswers, correctImage, i, x, randomInt, soundID, incorrectAnswers;
     private Random random;
     private Color[] primary;
     private Color[] mixed;
@@ -26,6 +31,9 @@ public class ColorsQuiz extends AppCompatActivity {
     private Color mix1, mix2;
     private AudioAttributes attributes;
     private SoundPool soundPool;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private TextView correct, incorrect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +47,13 @@ public class ColorsQuiz extends AppCompatActivity {
         buttonAnswer2 = findViewById(R.id.button_answer2);
         buttonAnswer3 = findViewById(R.id.button_answer3);
         buttons = new Button[]{buttonAnswer1, buttonAnswer2, buttonAnswer3};
+        correct = findViewById(R.id.text_correct);
+        incorrect = findViewById(R.id.text_incorrect);
         textAnd = findViewById(R.id.text_and);
         attributes = new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION).build();
         soundPool = new SoundPool.Builder().setMaxStreams(1).setAudioAttributes(attributes).build();
         correctAnswers = 0;
+        incorrectAnswers = 0;
         i = 0;
         x = 0;
         correctImage = 0;
@@ -50,6 +61,15 @@ public class ColorsQuiz extends AppCompatActivity {
         allColors = ColorsActivity.getColors();
         random = new Random();
         correctAnswer = "";
+
+        sharedPreferences = getSharedPreferences("ColorsProgress", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
+        if (!(sharedPreferences.getString("today", "").equals(date))) {
+            editor.clear();
+            editor.apply();
+        }
 
         //check how many primary and mixed colors
         for (Color color : allColors) {
@@ -82,13 +102,17 @@ public class ColorsQuiz extends AppCompatActivity {
                     if (correctAnswers < 2) { //first two questions with primary colors
                         if (b.getText().equals(correctAnswer)) {
                             correctAnswers++;
+                            correct.setText(((Integer) correctAnswers).toString());
                             askAQuestion();
                         } else {
                             b.setBackgroundColor(android.graphics.Color.RED);
+                            incorrectAnswers++;
+                            incorrect.setText(((Integer) incorrectAnswers).toString());
                         }
                     } else { //second two questions with mixed colors
                         if (b.getTag().equals(correctAnswer)) {
                             correctAnswers++;
+                            correct.setText(((Integer) correctAnswers).toString());
                             if (correctAnswers == 4) {
                                 soundID = soundPool.load(getApplicationContext(), R.raw.claps, 1);
                                 soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
@@ -97,12 +121,15 @@ public class ColorsQuiz extends AppCompatActivity {
                                         soundPool.play(soundID, 1, 1, 1, 0, 1f);
                                     }
                                 });
+                                Stats.saveProgress(sharedPreferences, correctAnswers, incorrectAnswers);
                                 finish();
                             } else {
                                 askAQuestion();
                             }
                         } else {
                             b.setVisibility(View.INVISIBLE);
+                            incorrectAnswers++;
+                            incorrect.setText(((Integer) incorrectAnswers).toString());
                         }
                     }
                 }

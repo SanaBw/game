@@ -113,7 +113,7 @@ public class RecyclerAdapterColors extends RecyclerView.Adapter<RecyclerAdapterC
                             }
 
                             //if all colors are played and learned - congrats and quiz
-                            if (sharedPreferences.getAll().size() > getItemCount()) {
+                            if (sharedPreferences.getAll().size() == getItemCount()) {
                                 editor.clear();
                                 editor.apply();
                                 ColorsActivity.bravo();

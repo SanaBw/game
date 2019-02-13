@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class QuizesActivity extends AppCompatActivity {
 
-    Button buttonLetter, buttonNumber, buttonDay, buttonMonth, buttonAnimal, buttonColor;
+    Button buttonLetter, buttonNumber, buttonDay, buttonMonth, buttonAnimal, buttonColor, buttonStats;
     Intent intent;
 
     @Override
@@ -22,6 +22,15 @@ public class QuizesActivity extends AppCompatActivity {
         buttonMonth = findViewById(R.id.button_month_quiz);
         buttonAnimal = findViewById(R.id.button_animal_quiz);
         buttonColor = findViewById(R.id.button_color_quiz);
+        buttonStats = findViewById(R.id.button_stats);
+
+        buttonStats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intent = new Intent(QuizesActivity.this, Stats.class);
+                startActivity(intent);
+            }
+        });
 
         if (LettersActivity.getLetters() == null) {
             buttonLetter.setAlpha(0.3f);

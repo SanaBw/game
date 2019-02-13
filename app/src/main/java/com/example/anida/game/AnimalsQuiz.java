@@ -1,5 +1,7 @@
 package com.example.anida.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
@@ -13,8 +15,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class AnimalsQuiz extends AppCompatActivity {
 
@@ -28,8 +35,11 @@ public class AnimalsQuiz extends AppCompatActivity {
     private Random random;
     private String correctAnswerString;
     private Animation animation;
-    private int correctAnswers, correctAnswerImage;
+    private int correctAnswers, incorrectAnswers, correctAnswerImage;
     private int buttonColor;
+    private TextView correct, incorrect;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +59,20 @@ public class AnimalsQuiz extends AppCompatActivity {
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_right);
         correctAnswerImage = -1;
         correctAnswers = 0;
+        incorrectAnswers = 0;
         correctAnswerString = "";
         buttonColor = getResources().getColor(R.color.colorPrimaryDark);
         randomNumber = -10;
+        correct = findViewById(R.id.text_correct);
+        incorrect = findViewById(R.id.text_incorrect);
+        sharedPreferences = getSharedPreferences("AnimalsProgress", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
+        if (!(sharedPreferences.getString("today", "").equals(date))) {
+            editor.clear();
+            editor.apply();
+        }
 
         chooseRandomAnimal();
 
@@ -64,15 +85,18 @@ public class AnimalsQuiz extends AppCompatActivity {
                         //if answer is correct, either next question or congrats
                         if (b.getTag().equals("correct")) {
                             correctAnswers++;
+                            correct.setText(((Integer) correctAnswers).toString());
                             chooseRandomAnimal();
                         } else { //if answer is not correct
-
+                            incorrectAnswers++;
+                            incorrect.setText(((Integer) incorrectAnswers).toString());
                             b.setVisibility(View.INVISIBLE);
                         }
                     } else { // second two questions are with picture as question and name of animal as answers
                         //if answer is correct, either next question or congrats
                         if (b.getText().equals(correctAnswerString)) {
                             correctAnswers++;
+                            correct.setText(((Integer) correctAnswers).toString());
                             if (correctAnswers == 4) { //congrats after 4th correct answer
                                 soundID = soundPool.load(getApplicationContext(), R.raw.claps, 1);
                                 soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
@@ -94,11 +118,14 @@ public class AnimalsQuiz extends AppCompatActivity {
                                         }).start();
                                     }
                                 });
+                                Stats.saveProgress(sharedPreferences, correctAnswers, incorrectAnswers);
                                 finish();
                             } else { //new question
                                 chooseRandomAnimal();
                             }
                         } else { //if answer is not correct
+                            incorrectAnswers++;
+                            incorrect.setText(((Integer) incorrectAnswers).toString());
                             b.setBackgroundColor(Color.RED);
                         }
                     }
@@ -115,7 +142,7 @@ public class AnimalsQuiz extends AppCompatActivity {
     }
 
 
-    public void chooseRandomAnimal() {
+    private void chooseRandomAnimal() {
         //restart each time
         for (Button b : buttons) {
             b.setText("");
@@ -194,4 +221,6 @@ public class AnimalsQuiz extends AppCompatActivity {
             }
         }
     }
+
+
 }

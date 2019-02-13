@@ -1,5 +1,7 @@
 package com.example.anida.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.media.AudioAttributes;
 import android.media.SoundPool;
@@ -10,7 +12,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 public class NumbersQuiz extends AppCompatActivity {
@@ -25,8 +30,11 @@ public class NumbersQuiz extends AppCompatActivity {
     private Random random, randomButton, randomRest;
     private String correctAnswer;
     private Animation animation;
-    private int correctAnswers;
+    private int correctAnswers, incorrectAnswers;
     private int buttonColor;
+    private TextView correct, incorrect;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +55,20 @@ public class NumbersQuiz extends AppCompatActivity {
         randomRest = new Random();
         animation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce_right);
         correctAnswers = 0;
+        incorrectAnswers = 0;
         correctAnswer = "";
         buttonColor = getResources().getColor(R.color.colorPrimaryDark);
+        correct = findViewById(R.id.text_correct);
+        incorrect = findViewById(R.id.text_incorrect);
+        sharedPreferences = getSharedPreferences("NumbersProgress", Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+
+        if (!(sharedPreferences.getString("today", "").equals(date))) {
+            editor.clear();
+            editor.apply();
+        }
 
         chooseRandomNumber();
 
@@ -67,6 +87,7 @@ public class NumbersQuiz extends AppCompatActivity {
                     //if answer is correct, either next question or congrats
                     if (b.getText().equals(correctAnswer)) {
                         correctAnswers++;
+                        correct.setText(((Integer) correctAnswers).toString());
                         if (correctAnswers == 4) { //congrats after 4th correct answer
                             soundID = soundPool.load(getApplicationContext(), R.raw.claps, 1);
                             soundPool.setOnLoadCompleteListener(new SoundPool.OnLoadCompleteListener() {
@@ -75,11 +96,14 @@ public class NumbersQuiz extends AppCompatActivity {
                                     soundPool.play(soundID, 1, 1, 1, 0, 1f);
                                 }
                             });
+                            Stats.saveProgress(sharedPreferences, correctAnswers, incorrectAnswers);
                             finish();
                         } else { //new question
                             chooseRandomNumber();
                         }
                     } else { //if answer is not correct
+                        incorrectAnswers++;
+                        incorrect.setText(((Integer) incorrectAnswers).toString());
                         b.setBackgroundColor(Color.RED);
                     }
                 }

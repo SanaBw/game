@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">Anida</string>
-
+    <string name="app_name">Fun Learning</string>
     <string name="title_activity_game">GameActivity</string>
 
 </resources>

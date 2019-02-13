@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="3.2"
+        android:weightSum="3.6"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -48,6 +48,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/eight" />
+
+        <TextView
+            android:id="@+id/text_correct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:textColor="@android:color/holo_green_light"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/text_incorrect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="20sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
